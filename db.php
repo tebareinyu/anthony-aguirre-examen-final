@@ -1,8 +1,8 @@
 <?php
-$host = 'localhost'; // Cambia si es necesario
-$dbname = 'todo_db'; // Cambia por tu base de datos
-$username = 'root'; // Cambia por tu usuario de base de datos
-$password = ''; // Cambia por tu contraseña
+$host = 'localhost'; 
+$dbname = 'todo_db'; 
+$username = 'root'; 
+$password = ''; 
 
 try {
     $conn = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
