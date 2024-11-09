@@ -8,12 +8,15 @@
         body {
             font-family: Arial, sans-serif;
             margin: 20px;
-            background-color: #f4f4f9;
-            color: #333;
+            background-color: 
+#f4f4f9;
+            color: 
+#333;
         }
         h1 {
             text-align: center;
-            color: #4CAF50;
+            color: 
+#4CAF50;
         }
         .form-container {
             margin-bottom: 20px;
@@ -24,44 +27,57 @@
             margin: 5px;
             width: 200px;
             border-radius: 4px;
-            border: 1px solid #ccc;
+            border: 1px solid 
+#ccc;
         }
         button {
             padding: 10px 15px;
-            background-color: #4CAF50;
-            color: white;
+            background-color: 
+#4CAF50;
+            color: 
+white;
             border: none;
             border-radius: 4px;
             cursor: pointer;
         }
         button:hover {
-            background-color: #45a049;
+            background-color: 
+#45a049;
         }
-        ul {
-            list-style-type: none;
-            padding: 0;
-            max-width: 600px;
+        table {
+            width: 100%;
+            max-width: 800px;
             margin: 0 auto;
+            border-collapse: collapse;
+            margin-top: 20px;
         }
-        li {
-            margin: 10px 0;
-            padding: 10px;
-            border: 1px solid #ccc;
-            display: flex;
-            justify-content: space-between;
-            background-color: #fff;
-            border-radius: 4px;
+        th, td {
+            text-align: left;
+            padding: 8px;
+            border-bottom: 1px solid 
+#ccc;
         }
-        li span {
-            display: flex;
-            align-items: center;
+        th {
+            background-color: 
+#4CAF50;
+            color: 
+white;
         }
-        li span button {
-            margin-left: 10px;
-            background-color: #f44336;
+        tr:hover {
+            background-color: 
+#f1f1f1;
         }
-        li span button.edit {
-            background-color: #008CBA;
+        .edit {
+            background-color: 
+#008CBA;
+            color: 
+white;
+        }
+        .delete {
+            background-color: 
+#f44336;
+            color: 
+white;
         }
     </style>
 </head>
@@ -75,30 +91,49 @@
         <button id="addTaskBtn" onclick="addTask()">Add Task</button>
     </div>
 
-    <ul id="taskList"></ul>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Title</th>
+                <th>Description</th>
+                <th>Status</th>
+                <th>Created At</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody id="taskList"></tbody>
+    </table>
 
     <script>
         const apiUrl = 'http://localhost/anthony-aguirre-examen-final/index.php?q=tasks';
 
         // Function to fetch and display tasks
         async function fetchTasks() {
-            const response = await fetch(apiUrl);
-            const tasks = await response.json();
-            const taskList = document.getElementById("taskList");
-            taskList.innerHTML = ''; // Clear existing tasks
-            tasks.forEach(task => {
-                const listItem = document.createElement("li");
-                listItem.innerHTML = `
-                    <span>
-                        <strong>${task.title}</strong>: ${task.description}
-                    </span>
-                    <span>
-                        <button class="edit" onclick="openEditTask(${task.id}, '${task.title}', '${task.description}')">Edit</button>
-                        <button onclick="deleteTask(${task.id})">Delete</button>
-                    </span>
-                `;
-                taskList.appendChild(listItem);
-            });
+            try {
+                const response = await fetch(apiUrl);
+                if (!response.ok) throw new Error("Network response was not ok");
+                const tasks = await response.json();
+                const taskList = document.getElementById("taskList");
+                taskList.innerHTML = ''; // Clear existing tasks
+                tasks.forEach(task => {
+                    const row = document.createElement("tr");
+                    row.innerHTML = `
+                        <td>${task.id}</td>
+                        <td>${task.title}</td>
+                        <td>${task.description}</td>
+                        <td>${task.status}</td>
+                        <td>${new Date(task.created_at).toLocaleString()}</td>
+                        <td>
+                            <button class="edit" onclick="openEditTask(${task.id}, '${task.title}', '${task.description}')">Edit</button>
+                            <button class="delete" onclick="deleteTask(${task.id})">Delete</button>
+                        </td>
+                    `;
+                    taskList.appendChild(row);
+                });
+            } catch (error) {
+                console.error('Error fetching tasks:', error);
+            }
         }
 
         // Function to add a new task
@@ -111,26 +146,38 @@
                 return;
             }
 
-            await fetch(apiUrl, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({ title, description })
-            });
+            try {
+                const response = await fetch(apiUrl, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({ title, description })
+                });
 
-            document.getElementById("title").value = '';
-            document.getElementById("description").value = '';
-            fetchTasks();
+                if (!response.ok) throw new Error("Error adding task");
+
+                document.getElementById("title").value = '';
+                document.getElementById("description").value = '';
+                fetchTasks();
+            } catch (error) {
+                console.error('Error adding task:', error);
+                alert("An error occurred while adding the task.");
+            }
         }
 
         // Function to delete a task
         async function deleteTask(id) {
             if (confirm("Do you want to delete this task?")) {
-                await fetch(`${apiUrl}/${id}`, {
-                    method: "DELETE"
-                });
-                fetchTasks();
+                try {
+                    await fetch(`${apiUrl}/${id}`, {
+                        method: "DELETE"
+                    });
+                    fetchTasks();
+                } catch (error) {
+                    console.error('Error deleting task:', error);
+                    alert("An error occurred while deleting the task.");
+                }
             }
         }
 
@@ -154,21 +201,28 @@
                 return;
             }
 
-            await fetch(`${apiUrl}/${id}`, {
-                method: "PUT",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({ title, description })
-            });
+            try {
+                const response = await fetch(`${apiUrl}/${id}`, {
+                    method: "PUT",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({ title, description })
+                });
 
-            const addButton = document.getElementById("addTaskBtn");
-            addButton.textContent = 'Add Task';
-            addButton.onclick = addTask;
+                if (!response.ok) throw new Error("Error updating task");
 
-            document.getElementById("title").value = '';
-            document.getElementById("description").value = '';
-            fetchTasks();
+                const addButton = document.getElementById("addTaskBtn");
+                addButton.textContent = 'Add Task';
+                addButton.onclick = addTask;
+
+                document.getElementById("title").value = '';
+                document.getElementById("description").value = '';
+                fetchTasks();
+            } catch (error) {
+                console.error('Error updating task:', error);
+                alert("An error occurred while updating the task.");
+            }
         }
 
         // Initial fetch to load tasks
