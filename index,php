@@ -1,0 +1,68 @@
+<?php
+// index.php
+
+header('Content-Type: application/json');
+header('Access-Control-Allow-Origin: *');  // Permite CORS
+
+include 'tasks.php';
+
+// Obtener la acción de la URL (por ejemplo, "/tasks")
+$method = $_SERVER['REQUEST_METHOD'];
+$request = explode('/', trim($_SERVER['PATH_INFO'], '/'));
+$taskId = isset($request[1]) ? (int)$request[1] : null;
+
+switch ($method) {
+    case 'POST':  // Crear una nueva tarea
+        if ($request[0] == 'tasks') {
+            $input = json_decode(file_get_contents('php://input'), true);
+            $title = $input['title'];
+            $description = $input['description'];
+            
+            if (createTask($title, $description)) {
+                echo json_encode(['message' => 'Tarea creada con éxito']);
+            } else {
+                http_response_code(500);
+                echo json_encode(['error' => 'Error al crear la tarea']);
+            }
+        }
+        break;
+
+    case 'GET':  // Listar todas las tareas
+        if ($request[0] == 'tasks') {
+            $tasks = getAllTasks();
+            echo json_encode($tasks);
+        }
+        break;
+
+    case 'PUT':  // Actualizar una tarea
+        if ($request[0] == 'tasks' && $taskId) {
+            $input = json_decode(file_get_contents('php://input'), true);
+            $title = $input['title'];
+            $description = $input['description'];
+            $completed = $input['completed'];
+            
+            if (updateTask($taskId, $title, $description, $completed)) {
+                echo json_encode(['message' => 'Tarea actualizada con éxito']);
+            } else {
+                http_response_code(500);
+                echo json_encode(['error' => 'Error al actualizar la tarea']);
+            }
+        }
+        break;
+
+    case 'DELETE':  // Eliminar una tarea
+        if ($request[0] == 'tasks' && $taskId) {
+            if (deleteTask($taskId)) {
+                echo json_encode(['message' => 'Tarea eliminada con éxito']);
+            } else {
+                http_response_code(500);
+                echo json_encode(['error' => 'Error al eliminar la tarea']);
+            }
+        }
+        break;
+
+    default:
+        http_response_code(405);
+        echo json_encode(['error' => 'Método no permitido']);
+        break;
+}
