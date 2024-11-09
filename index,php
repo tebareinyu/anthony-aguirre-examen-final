@@ -1,68 +1,76 @@
 <?php
-// index.php
+require 'db.php';
 
-header('Content-Type: application/json');
-header('Access-Control-Allow-Origin: *');  // Permite CORS
+// Obtén la URL y el método
+$requestMethod = $_SERVER['REQUEST_METHOD'];
+$requestUri = explode('/', trim($_GET['q'], '/'));
 
-include 'tasks.php';
-
-// Obtener la acción de la URL (por ejemplo, "/tasks")
-$method = $_SERVER['REQUEST_METHOD'];
-$request = explode('/', trim($_SERVER['PATH_INFO'], '/'));
-$taskId = isset($request[1]) ? (int)$request[1] : null;
-
-switch ($method) {
-    case 'POST':  // Crear una nueva tarea
-        if ($request[0] == 'tasks') {
-            $input = json_decode(file_get_contents('php://input'), true);
-            $title = $input['title'];
-            $description = $input['description'];
-            
-            if (createTask($title, $description)) {
-                echo json_encode(['message' => 'Tarea creada con éxito']);
-            } else {
-                http_response_code(500);
-                echo json_encode(['error' => 'Error al crear la tarea']);
-            }
-        }
+switch ($requestMethod) {
+    case 'GET':
+        handleGet($requestUri);
         break;
-
-    case 'GET':  // Listar todas las tareas
-        if ($request[0] == 'tasks') {
-            $tasks = getAllTasks();
-            echo json_encode($tasks);
-        }
+    case 'POST':
+        handlePost();
         break;
-
-    case 'PUT':  // Actualizar una tarea
-        if ($request[0] == 'tasks' && $taskId) {
-            $input = json_decode(file_get_contents('php://input'), true);
-            $title = $input['title'];
-            $description = $input['description'];
-            $completed = $input['completed'];
-            
-            if (updateTask($taskId, $title, $description, $completed)) {
-                echo json_encode(['message' => 'Tarea actualizada con éxito']);
-            } else {
-                http_response_code(500);
-                echo json_encode(['error' => 'Error al actualizar la tarea']);
-            }
-        }
+    case 'PUT':
+        handlePut($requestUri);
         break;
-
-    case 'DELETE':  // Eliminar una tarea
-        if ($request[0] == 'tasks' && $taskId) {
-            if (deleteTask($taskId)) {
-                echo json_encode(['message' => 'Tarea eliminada con éxito']);
-            } else {
-                http_response_code(500);
-                echo json_encode(['error' => 'Error al eliminar la tarea']);
-            }
-        }
+    case 'DELETE':
+        handleDelete($requestUri);
         break;
-
     default:
         http_response_code(405);
-        echo json_encode(['error' => 'Método no permitido']);
-        break;
+        echo json_encode(['message' => 'Method not allowed']);
 }
+
+function handleGet($requestUri) {
+    global $conn;
+    
+    if (count($requestUri) === 2 && $requestUri[0] === 'tasks') {
+        $stmt = $conn->prepare("SELECT * FROM tasks");
+        $stmt->execute();
+        $tasks = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        echo json_encode($tasks);
+    } elseif (count($requestUri) === 3 && $requestUri[0] === 'tasks') {
+        $id = intval($requestUri[1]);
+        $stmt = $conn->prepare("SELECT * FROM tasks WHERE id = ?");
+        $stmt->execute([$id]);
+        $task = $stmt->fetch(PDO::FETCH_ASSOC);
+        echo json_encode($task);
+    } else {
+        http_response_code(404);
+        echo json_encode(['message' => 'Not found']);
+    }
+}
+
+function handlePost() {
+    global $conn;
+    $data = json_decode(file_get_contents('php://input'), true);
+    
+    $stmt = $conn->prepare("INSERT INTO tasks (title, description, status) VALUES (?, ?, ?)");
+    $stmt->execute([$data['title'], $data['description'], $data['status'] ?? false]);
+    
+    echo json_encode(['message' => 'Task created', 'id' => $conn->lastInsertId()]);
+}
+
+function handlePut($requestUri) {
+    global $conn;
+    $id = intval($requestUri[1]);
+    $data = json_decode(file_get_contents("php://input"), true);
+    
+    $stmt = $conn->prepare("UPDATE tasks SET title = ?, description = ?, status = ? WHERE id = ?");
+    $stmt->execute([$data['title'], $data['description'], $data['status'], $id]);
+    
+    echo json_encode(['message' => 'Task updated']);
+}
+
+function handleDelete($requestUri) {
+    global $conn;
+    $id = intval($requestUri[1]);
+    
+    $stmt = $conn->prepare("DELETE FROM tasks WHERE id = ?");
+    $stmt->execute([$id]);
+    
+    echo json_encode(['message' => 'Task deleted']);
+}
+?>

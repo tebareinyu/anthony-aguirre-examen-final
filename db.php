@@ -1,16 +1,13 @@
 <?php
-// db.php
+$host = 'localhost'; // Cambia si es necesario
+$dbname = 'todo_db'; // Cambia por tu base de datos
+$username = 'root'; // Cambia por tu usuario de base de datos
+$password = ''; // Cambia por tu contraseña
 
-$host = 'localhost';  // Cambia si tu base de datos está en otro servidor
-$db = 'todo_db';
-$user = 'root';       // Cambia el usuario de la base de datos
-$pass = '';           // Cambia la contraseña si es necesario
-
-// Establecer la conexión con la base de datos
 try {
-    $pdo = new PDO("mysql:host=$host;dbname=$db", $user, $pass);
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    $conn = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
+    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 } catch (PDOException $e) {
-    echo 'Error de conexión: ' . $e->getMessage();
-    die();
+    echo "Connection failed: " . $e->getMessage();
 }
+?>
