@@ -47,8 +47,8 @@ function handlePost() {
     global $conn;
     $data = json_decode(file_get_contents('php://input'), true);
     
-    $stmt = $conn->prepare("INSERT INTO tasks (title, description, completed) VALUES (?, ?, ?)");
-    $stmt->execute([$data['title'], $data['description'], $data['completed'] ?? false]);
+    $stmt = $conn->prepare("INSERT INTO tasks (title, description, status) VALUES (?, ?, ?)");
+    $stmt->execute([$data['title'], $data['description'], $data['status'] ?? false]);
     
     echo json_encode(['message' => 'Task created', 'id' => $conn->lastInsertId()]);
 }
@@ -61,7 +61,7 @@ function handlePut($requestUri) {
     $stmt = $conn->prepare("UPDATE tasks SET title = ?, description = ?, status = ? WHERE id = ?");
     $stmt->execute([$data['title'], $data['description'], $data['status'], $id]);
     
-    echo json_encode(['message' => 'Task updated']);
+    echo json_encode(['message' => 'Task Actualizada']);
 }
 
 function handleDelete($requestUri) {

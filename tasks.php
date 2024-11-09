@@ -22,14 +22,14 @@ function getAllTasks() {
 }
 
 // Función para actualizar una tarea
-function updateTask($id, $title, $description, $completed) {
+function updateTask($id, $title, $description, $status) {
     global $pdo;
-    $sql = "UPDATE tasks SET title = :title, description = :description, completed = :completed WHERE id = :id";
+    $sql = "UPDATE tasks SET title = :title, description = :description, status = :status WHERE id = :id";
     $stmt = $pdo->prepare($sql);
     $stmt->bindParam(':id', $id);
     $stmt->bindParam(':title', $title);
     $stmt->bindParam(':description', $description);
-    $stmt->bindParam(':completed', $completed, PDO::PARAM_BOOL);
+    $stmt->bindParam(':status', $status, PDO::PARAM_BOOL);
     return $stmt->execute();
 }
 
