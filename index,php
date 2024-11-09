@@ -20,7 +20,7 @@ switch ($requestMethod) {
         break;
     default:
         http_response_code(405);
-        echo json_encode(['message' => 'Method not allowed']);
+        echo json_encode(['message' => 'Metodo no permitido']);
 }
 
 function handleGet($requestUri) {
@@ -39,7 +39,7 @@ function handleGet($requestUri) {
         echo json_encode($task);
     } else {
         http_response_code(404);
-        echo json_encode(['message' => 'Not found']);
+        echo json_encode(['message' => 'No se encuentra']);
     }
 }
 
@@ -50,7 +50,7 @@ function handlePost() {
     $stmt = $conn->prepare("INSERT INTO tasks (title, description, status) VALUES (?, ?, ?)");
     $stmt->execute([$data['title'], $data['description'], $data['status'] ?? false]);
     
-    echo json_encode(['message' => 'Task Creada', 'id' => $conn->lastInsertId()]);
+    echo json_encode(['message' => 'Task Creada puro power', 'id' => $conn->lastInsertId()]);
 }
 
 function handlePut($requestUri) {

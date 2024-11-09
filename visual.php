@@ -49,8 +49,8 @@
                         <strong>${task.title}</strong>: ${task.description}
                     </span>
                     <span>
-                        <button onclick="deleteTask(${task.id})">Delete</button>
-                        <button onclick="openEditTask(${task.id}, '${task.title}', '${task.description}')">Edit</button>
+                        <button onclick="deleteTask(${task.id})">Borrar</button>
+                        <button onclick="openEditTask(${task.id}, '${task.title}', '${task.description}')">Editar</button>
                     </span>
                 `;
                 taskList.appendChild(listItem);
