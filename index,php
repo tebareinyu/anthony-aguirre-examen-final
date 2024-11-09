@@ -71,6 +71,6 @@ function handleDelete($requestUri) {
     $stmt = $conn->prepare("DELETE FROM tasks WHERE id = ?");
     $stmt->execute([$id]);
     
-    echo json_encode(['message' => 'Task deleted']);
+    echo json_encode(['message' => 'Task Eliminada']);
 }
 ?>
