@@ -14,6 +14,8 @@ Metodos API REST
 GET
 http://localhost/anthony-aguirre-examen-final/index.php?q=tasks/1
 
+![Imagen de ejemplo](imagenes2/creada.jpeg)
+
 
 POST
 http://localhost/anthony-aguirre-examen-final/index.php?q=tasks
