@@ -6,84 +6,108 @@
     <title>AGREGAR ELEMENTOS A LA LISTA</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: 
-#f4f4f9;
+#e8f0f2;
             color: 
 #333;
+            margin: 0;
+            padding: 20px;
         }
         h1 {
             text-align: center;
             color: 
-#4CAF50;
+#007bbd;
+            margin-bottom: 30px;
         }
         .form-container {
-            margin-bottom: 20px;
             text-align: center;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px 
+rgba(0, 0, 0, 0.2);
+            padding: 20px;
+            background-color: 
+#ffffff;
+            border-radius: 8px;
         }
         input {
             padding: 10px;
             margin: 5px;
-            width: 200px;
-            border-radius: 4px;
+            width: 250px;
+            border-radius: 5px;
             border: 1px solid 
-#ccc;
+#007bbd;
+            transition: border-color 0.3s;
+        }
+        input:focus {
+            border-color: 
+#005a8b;
+            outline: none;
         }
         button {
-            padding: 10px 15px;
+            padding: 10px 20px;
             background-color: 
-#4CAF50;
+#007bbd;
             color: 
 white;
             border: none;
-            border-radius: 4px;
+            border-radius: 5px;
             cursor: pointer;
+            transition: background-color 0.3s;
         }
         button:hover {
             background-color: 
-#45a049;
+#005a8b;
         }
         table {
             width: 100%;
             max-width: 800px;
-            margin: 0 auto;
+            margin: 20px auto;
             border-collapse: collapse;
-            margin-top: 20px;
+            border: 1px solid 
+#007bbd;
+            border-radius: 5px;
+            overflow: hidden;
         }
         th, td {
             text-align: left;
-            padding: 8px;
+            padding: 12px;
             border-bottom: 1px solid 
 #ccc;
         }
         th {
             background-color: 
-#4CAF50;
+#007bbd;
             color: 
 white;
+        }
+        tr:nth-child(even) {
+            background-color: 
+#f2f2f2;
         }
         tr:hover {
             background-color: 
-#f1f1f1;
+#d1e7fd;
         }
-        .edit {
+        .edit, .delete {
             background-color: 
-#008CBA;
+#28a745; /* Green */
+            border: none;
+            padding: 8px 12px;
             color: 
 white;
+            border-radius: 5px;
+            cursor: pointer;
         }
         .delete {
             background-color: 
-#f44336;
-            color: 
-white;
+#dc3545; /* Red */
         }
     </style>
 </head>
 <body>
 
-    <h1>To-Do List</h1>
+    <h1>LISTA DE ACTIVIDADES</h1>
 
     <div class="form-container">
         <input id="title" placeholder="Task Title" aria-label="Task Title" />
@@ -94,7 +118,6 @@ white;
     <table>
         <thead>
             <tr>
-                <th>ID</th>
                 <th>Title</th>
                 <th>Description</th>
                 <th>Status</th>
@@ -119,7 +142,6 @@ white;
                 tasks.forEach(task => {
                     const row = document.createElement("tr");
                     row.innerHTML = `
-                        <td>${task.id}</td>
                         <td>${task.title}</td>
                         <td>${task.description}</td>
                         <td>${task.status}</td>
