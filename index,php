@@ -50,7 +50,7 @@ function handlePost() {
     $stmt = $conn->prepare("INSERT INTO tasks (title, description, status) VALUES (?, ?, ?)");
     $stmt->execute([$data['title'], $data['description'], $data['status'] ?? false]);
     
-    echo json_encode(['message' => 'Task created', 'id' => $conn->lastInsertId()]);
+    echo json_encode(['message' => 'Task Creada', 'id' => $conn->lastInsertId()]);
 }
 
 function handlePut($requestUri) {
