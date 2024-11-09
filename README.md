@@ -50,3 +50,7 @@ Revision de datos plasmados
 
 Configuracion de la base de datos
 ![Imagen de ejemplo](imagenes2/base2.jpeg)
+
+
+
+Frontend![Imagen de ejemplo](imagenes2/tipificador.jpeg)
