@@ -63,7 +63,7 @@
             const description = document.getElementById("description").value;
 
             if (title.trim() === "") {
-                alert("Title is required");
+                alert("Titulo requerido");
                 return;
             }
 
@@ -82,7 +82,7 @@
 
         // Function to delete a task
         async function deleteTask(id) {
-            if (confirm("Are you sure you want to delete this task?")) {
+            if (confirm("deseas eliminar la task")) {
                 await fetch(`${apiUrl}/${id}`, {
                     method: "DELETE"
                 });
@@ -96,7 +96,7 @@
             document.getElementById("description").value = description;
 
             const addButton = document.querySelector("button[onclick='addTask()']");
-            addButton.textContent = 'Update Task';
+            addButton.textContent = 'Task Actualizada';
             addButton.onclick = () => updateTask(id);
         }
 
