@@ -34,3 +34,16 @@ DELETE
 http://localhost/anthony-aguirre-examen-final/index.php?q=tasks/1
 
 ![Imagen de ejemplo](imagenes2/eliminada.jpeg)
+
+
+
+BASES DE DATOS
+DELETE
+http://localhost/anthony-aguirre-examen-final/index.php?q=tasks/1
+
+![Imagen de ejemplo](imagenes2/base1.jpeg)
+
+DELETE
+http://localhost/anthony-aguirre-examen-final/index.php?q=tasks/1
+
+![Imagen de ejemplo](imagenes2/base2.jpeg)
