@@ -26,7 +26,7 @@ switch ($requestMethod) {
 function handleGet($requestUri) {
     global $conn;
     
-    if (count($requestUri) === 2 && $requestUri[0] === 'tasks') {
+    if (count($requestUri) === 1 && $requestUri[0] === 'tasks') {
         $stmt = $conn->prepare("SELECT * FROM tasks");
         $stmt->execute();
         $tasks = $stmt->fetchAll(PDO::FETCH_ASSOC);
