@@ -7,6 +7,12 @@ API REST
 
 BASES DE DATOS Y PROGRAMACION WEB
 
+CONEXION
+
+$host = 'localhost'; 
+$dbname = 'todo_db'; 
+$username = 'root'; 
+$password = ''; 
 
 
 Metodos API REST
