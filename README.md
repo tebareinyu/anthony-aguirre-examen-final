@@ -14,16 +14,23 @@ Metodos API REST
 GET
 http://localhost/anthony-aguirre-examen-final/index.php?q=tasks/1
 
-![Imagen de ejemplo](imagenes2/creada.jpeg)
+![Imagen de ejemplo](imagenes2/todos.jpeg)
 
 
 POST
 http://localhost/anthony-aguirre-examen-final/index.php?q=tasks
 
 
+![Imagen de ejemplo](imagenes2/creada.jpeg)
+
+
 PUT
 http://localhost/anthony-aguirre-examen-final/index.php?q=tasks/1
 
 
+![Imagen de ejemplo](imagenes2/actualizada.jpeg)
+
 DELETE
 http://localhost/anthony-aguirre-examen-final/index.php?q=tasks/1
+
+![Imagen de ejemplo](imagenes2/eliminada.jpeg)
